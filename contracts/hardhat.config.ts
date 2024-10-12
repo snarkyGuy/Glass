@@ -14,11 +14,11 @@ const config: HardhatUserConfig = {
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
-   
+
   },
 };
 
-// MoonPin deployed at address: 0x0752c7ca0d8ED90FA7170310b748923f637c8A32
-// MoonBoard deployed at address: 0xB81b65Da6417eE7B63c76e99340e50061D6472Af
+// GlassPin deployed at address: 0x0752c7ca0d8ED90FA7170310b748923f637c8A32
+// GlassBoard deployed at address: 0xB81b65Da6417eE7B63c76e99340e50061D6472Af
 
 export default config;
