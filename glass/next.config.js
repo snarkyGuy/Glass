@@ -1,11 +1,3 @@
-/** @type {import('next').NextConfig} */
-
-
-
 module.exports = {
-  target: 'serverless',
-  reactStrictMode: true,
-}
-
-
-
+  target: 'server', // or 'serverless'
+};
