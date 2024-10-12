@@ -20,7 +20,7 @@ import {
   usePrepareContractWrite,
 } from "wagmi";
 
-export default function glassboards() {
+export default function Glassboards() {
   const router = useRouter();
   const { owner, id } = router.query;
 

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+  "start": "next start",
     "lint": "next lint",
     "postinstall": "yarn generate-contract-artifacts",
     "generate-contract-artifacts": "cd ../contracts && yarn install --frozen-lockfile && yarn build && cd ../app"

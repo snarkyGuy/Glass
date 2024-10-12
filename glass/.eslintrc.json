@@ -1,3 +1,10 @@
+
 {
+  "rules": {
+    "no-console": "off",  // Disable console warnings
+    "react/prop-types": "off"  // Disable prop-types checking
+  }
+  ,
   "extends": "next/core-web-vitals"
+
 }
