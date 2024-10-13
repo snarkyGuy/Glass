@@ -12,24 +12,21 @@ import { GlassBoardABI } from "contracts";
 import { BigNumber, ethers } from "ethers";
 import { Button } from "./button";
 import { useState } from "react";
-import { Glasspin } from "../pages/create-Glassboard"
+import { Glasspin } from "../pages/create-Glassboard";
 import { contracts } from "constants/contracts";
-import { PinataSDK } from "pinata-web3"
+import { PinataSDK } from "pinata-web3";
 import { NavigationButton } from "./navigation-button";
 
 // Environment variable for security
 
-const PINATA_JWT='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI1YTAzNWNhNi01MGUwLTQzOTItOWZmYS0zODg1NzVmZDRlMDgiLCJlbWFpbCI6Im1hYXp3ZWIzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6IkZSQTEifSx7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6Ik5ZQzEifV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiIzYTU3MWRjMjdmOWJmMDkwYjkzOSIsInNjb3BlZEtleVNlY3JldCI6ImNmODViNzRlYjBkZDBiMDVjZDJiYmQyYjE1NWE5Y2U3MDk3MjVmYTVkNTY0ZjgxMmJmNGUzMDRiM2MyYzg2N2UiLCJleHAiOjE3NTk1OTg2MTV9.Arf8VJVz3INKInUhcXcBQjGBqFy5VPkzkj2bh37cELg'
-const NEXT_PUBLIC_GATEWAY_URL="crimson-lengthy-shrimp-899.mypinata.cloud"
-
-
-
-
+const PINATA_JWT =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI1YTAzNWNhNi01MGUwLTQzOTItOWZmYS0zODg1NzVmZDRlMDgiLCJlbWFpbCI6Im1hYXp3ZWIzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6IkZSQTEifSx7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6Ik5ZQzEifV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiIzYTU3MWRjMjdmOWJmMDkwYjkzOSIsInNjb3BlZEtleVNlY3JldCI6ImNmODViNzRlYjBkZDBiMDVjZDJiYmQyYjE1NWE5Y2U3MDk3MjVmYTVkNTY0ZjgxMmJmNGUzMDRiM2MyYzg2N2UiLCJleHAiOjE3NTk1OTg2MTV9.Arf8VJVz3INKInUhcXcBQjGBqFy5VPkzkj2bh37cELg";
+const NEXT_PUBLIC_GATEWAY_URL = "crimson-lengthy-shrimp-899.mypinata.cloud";
 
 export const pinata = new PinataSDK({
   pinataJwt: `${PINATA_JWT}`,
-  pinataGateway: `${NEXT_PUBLIC_GATEWAY_URL}`
-})
+  pinataGateway: `${NEXT_PUBLIC_GATEWAY_URL}`,
+});
 
 type CreateGlassboardModalProps = {
   isOpen: boolean;
@@ -72,7 +69,9 @@ export const CreateGlassboardModal = ({
 
   const totalFee = createBoardFee.add(totalPinFee);
 
-  const [loadingState, setLoadingState] = useState<"initial" | "ipfs" | "mint">("initial");
+  const [loadingState, setLoadingState] = useState<"initial" | "ipfs" | "mint">(
+    "initial"
+  );
 
   const loadingStateString = {
     ipfs: "Uploading to IPFS",
@@ -106,20 +105,17 @@ export const CreateGlassboardModal = ({
     const selectedGlasspins = Glasspins.filter((Glasspin) => Glasspin.selected);
     console.log("Selected Glasspins:", selectedGlasspins);
 
-   
     // Upload metadata to Pinata
     const tokenUris = await Promise.all(
       selectedGlasspins.map(async (Glasspin) => {
         if (Glasspin.selected && Glasspin.imageFile) {
-
-          const upload = await pinata.upload.file(Glasspin.imageFile)
+          const upload = await pinata.upload.file(Glasspin.imageFile);
           console.log(upload);
-    
-          const ipfsUrl = await pinata.gateways.convert(upload.IpfsHash)
+
+          const ipfsUrl = await pinata.gateways.convert(upload.IpfsHash);
           console.log(ipfsUrl);
 
-          return ipfsUrl
-         
+          return ipfsUrl;
         } else {
           console.warn(`Skipping upload for ${Glasspin.name}: No image file.`);
           return null; // Skip if no image file
@@ -129,7 +125,6 @@ export const CreateGlassboardModal = ({
 
     // Filter out null results from token URIs
     const validTokenUris = tokenUris.filter((uri) => uri !== null);
-
 
     console.log("Token URIs:", validTokenUris);
 
@@ -156,7 +151,6 @@ export const CreateGlassboardModal = ({
     }
   };
 
-
   return (
     <Modal isOpen={isOpen} onDismiss={close}>
       <div className="m-4">
@@ -169,11 +163,14 @@ export const CreateGlassboardModal = ({
 
         <div className="flex gap-4">
           <div className="w-full">
-            <h1>GlASS</h1>
-            <p className="font-bold text-lg">Publish Glassboard</p>
+            <h2 className="mb-4">Publish</h2>
+            {/* <p className="font-bold text-lg"></p> */}
             <p className="text-sm">
-              In order to create your Glassboard you need to pay for each Glasspin
-              you have created and a fee for creating the Glassboard
+              <p className="text-sm">
+                To create your Glassboard, you&apos;ll need to pay for each
+                Glasspin you&apos;ve added, along with a fee for setting up the
+                Glassboard.
+              </p>
             </p>
           </div>
           <div className="w-full">
@@ -223,10 +220,9 @@ export const CreateGlassboardModal = ({
                   </Button>
                 ) : (
                   <NavigationButton href="/dashboard">
-                    Dashboard
+                    Go to Dashboard
                   </NavigationButton>
                 )}
-                {successful && <p className="text-right mt-2">Success!</p>}
               </div>
             </div>
           </div>

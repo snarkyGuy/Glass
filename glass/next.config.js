@@ -1,3 +1,7 @@
+// next.config.js
 module.exports = {
-  target: 'server', // or 'serverless'
+  images: {
+    unoptimized: true,
+  },
+  output: 'export', // If not already set
 };

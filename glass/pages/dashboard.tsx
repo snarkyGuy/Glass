@@ -231,7 +231,7 @@ const Glassboard = ({
       </div>
       <div className="flex items-center justify-between mx-8 my-8">
         <div className="flex gap-4">
-          <h3>Creaated by:</h3>
+          <h3>Created by:</h3>
           <p>You</p>
         </div>
         <div className="flex gap-2">

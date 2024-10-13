@@ -245,7 +245,7 @@ const GlasspinCard = ({
   const [showPinModal, setShowPinModal] = useState(false);
 
   return (
-    <div className="border-2 border-outlines rounded-2xl relative overflow-hidden mb-4">
+    <div className="border-2 bg-slate-50 border-outlines rounded-2xl relative overflow-hidden mb-4">
       <div className="relative">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={Glasspin} alt="" />
@@ -283,7 +283,7 @@ const GlasspinCard = ({
           ${
             hasVoted
               ? "bg-red-300 hover:bg-red-500"
-              : "bg-secondary-brand hover:bg-primary-brand"
+              : "bg-white hover:bg-primary-brand"
           }`}
         >
           <div className={`${hasVoted ? "rotate-180" : ""}`}>

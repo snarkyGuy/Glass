@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    "allowJs": false,  // Set to false if you're only using TS
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,

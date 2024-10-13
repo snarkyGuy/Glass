@@ -98,16 +98,11 @@ const Upload = ({ files, setFiles, setPageState }: UploadProps) => {
           </div>
 
           <div className="w-3/4 mx-auto mb-8">
-            <Checkbox
-              id="my-pictures"
-              checked={myPictures}
-              label="These pictures are mine"
-              onChange={(e) => setMyPictures(e.target.checked)}
-            />
+          
             <Checkbox
               id="community-guidelines"
               checked={communityGuidelines}
-              label="I have read community guidelines"
+              label="I own these pictures , I have read community guidelines"
               onChange={(e) => setCommunityGuidelines(e.target.checked)}
             />
           </div>

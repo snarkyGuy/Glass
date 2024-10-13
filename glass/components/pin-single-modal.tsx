@@ -1,7 +1,7 @@
 import { Close } from "svg/close";
 import { IconButton } from "./icon-button";
 import { Modal } from "./modal";
-import Image from "next/image";
+
 import { Button } from "./button";
 import { Select } from "./select";
 import {
@@ -16,6 +16,7 @@ import { useState } from "react";
 import { NavigationButton } from "./navigation-button";
 import { BigNumber } from "ethers";
 import { contracts } from "constants/contracts";
+import Image from "next/image";
 
 type PinSingleModalProps = {
   isOpen: boolean;
@@ -25,6 +26,7 @@ type PinSingleModalProps = {
   GlasspinId: number;
   boardOwner: string;
 };
+
 export const PinSingleModal = ({
   isOpen,
   close,
@@ -85,7 +87,6 @@ export const PinSingleModal = ({
     <Modal isOpen={isOpen} onDismiss={onDismiss}>
       <div className="m-4">
         <div className="flex justify-between mb-4">
-          
           <IconButton className="" onClick={close}>
             <Close />
           </IconButton>
@@ -96,9 +97,8 @@ export const PinSingleModal = ({
             <div className="bg-white py-2 px-4 h-8 flex items-center">
               <h3 className="">{title === "" ? "No title" : title}</h3>
             </div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={imageUrl} alt="" />
-            <div className="bg-white py-2 px-4 h-8 flex items-center">
+            <Image src={imageUrl} alt="" />
+            <div className="bg-white font-semibold py-2 px-4 h-8 flex items-center">
               <Select
                 onChange={(e) => setSelectedGlassboard(e.target.value)}
                 value={selectedGlassboard}
@@ -120,14 +120,13 @@ export const PinSingleModal = ({
 type PinProps = {
   onClickPin: () => void;
 };
+
 const Pin = ({ onClickPin }: PinProps) => {
   return (
-    <div className="w-full">
-
+    <div className="w-full flex flex-col justify-center">
       <p className="font-bold text-lg">Pin Glasspin</p>
-      <p className="">
-        You can pin this Glasspin or choose to pin many (coming soon!).
-      </p>
+      <p className="">It can&apos;t be blank, so make sure it&apos;s set.
+      .</p>
       <Button onClick={onClickPin} className="my-8">
         Pin it
       </Button>
@@ -138,29 +137,29 @@ const Pin = ({ onClickPin }: PinProps) => {
 type PaymentProps = {
   onClickPayment: () => void;
 };
+
 const Payment = ({ onClickPayment }: PaymentProps) => {
   const pinFee = 0.0001;
   return (
-    <div className="w-full flex flex-col justify-center ">
-  
+    <div className="w-full flex flex-col justify-center">
       <p className="font-bold text-lg">Pin fee</p>
       <div className="text-primary-brand flex justify-between font-headers mt-4">
         <p className="">1 Pin</p>
         <p>{pinFee} ETH</p>
       </div>
-      <div className=" flex justify-between font-headers mt-4">
+      <div className="flex justify-between font-headers mt-4">
         <p className="">Total</p>
         <p>{pinFee} ETH</p>
       </div>
       <Button onClick={onClickPayment} className="my-8">
         Continue
       </Button>
-     
     </div>
   );
 };
 
 type CompleteProps = {};
+
 const Complete = ({}: CompleteProps) => {
   return (
     <div className="w-full">
@@ -171,7 +170,7 @@ const Complete = ({}: CompleteProps) => {
         alt=""
         src="/images/logo.png"
       />
-      <p className="font-bold text-lg">Well done pinning!</p>
+      <p className="font-bold text-lg">Pinned Already!!</p>
       <p className="my-4">Go see all your boards or continue pinning</p>
       <NavigationButton href="/dashboard">See Boards</NavigationButton>
     </div>
