@@ -18,3 +18,6 @@ main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
+
+// GlassPin deployed at address: 0xf26f160901C4fF21023746658c4148895EEB48cf
+// GlassBoard deployed at address: 0x69b056A09249b5c7d4bb8f9d39b1c0E13d4dEe36
