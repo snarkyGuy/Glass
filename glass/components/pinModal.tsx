@@ -28,7 +28,7 @@ type PinSingleModalProps = {
 export const PinSingleModal = ({
   isOpen,
   close,
-  title = "",
+  title,
   imageUrl,
   GlasspinId,
   boardOwner,
@@ -93,7 +93,7 @@ export const PinSingleModal = ({
         <div className="flex gap-4">
           <div className="border-2 border-outlines rounded-lg w-full overflow-hidden">
             <div className="bg-white py-2 px-4 h-8 flex items-center">
-              <h3 className="">{title === "" ? "No title" : title}</h3>
+              <h3 className="">{title}</h3>
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={imageUrl} alt="" />
@@ -123,7 +123,7 @@ const Pin = ({ onClickPin }: PinProps) => {
   return (
     <div className="w-full flex flex-col justify-center ">
       <p className="font-bold text-lg">Pin Glasspin</p>
-      <p className="">
+      <p className="text-gray-400">
         You can pin this Glasspin or choose to pin many (coming soon!).
       </p>
       <Button onClick={onClickPin} className="my-8">
@@ -161,8 +161,8 @@ const Complete = ({}: CompleteProps) => {
   return (
     <div className="w-full flex flex-col justify-center ">
       <p className="font-bold text-lg">Well done pinning!</p>
-      <p className="my-4">Go see all your boards or continue pinning</p>
-      <NavigationButton href="/dashboard">See Boards</NavigationButton>
+      <p className="my-4 text-gray-400">Go see all your boards or continue pinning</p>
+      <NavigationButton href="/mydashboard">See Boards</NavigationButton>
     </div>
   );
 };

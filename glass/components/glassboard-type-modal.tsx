@@ -19,7 +19,7 @@ export const CreateGlassboardTypeModal = ({
         <div className="flex justify-between">
           <div>
             <h3>Create Glassboard</h3>
-            <p className="">
+            <p className="text-gray-400">
               Choose what content you want to put into your board
             </p>
           </div>

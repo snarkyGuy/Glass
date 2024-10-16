@@ -21,7 +21,7 @@ import { contracts } from "constants/contracts";
 import Head from "next/head";
 import { Select } from "components/select";
 
-export default function Dashboard() {
+export default function MyDashboard() {
   const [slot, setSlot] = useState<"GlassBoards" | "settings">("GlassBoards");
 
   const getSlot = () => {

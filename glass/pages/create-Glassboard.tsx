@@ -58,14 +58,14 @@ const Upload = ({ files, setFiles, setPageState }: UploadProps) => {
               setPageState("publish");
             }}
           >
-            Continue
+            Next
           </Button>
         </div>
 
         <div className="border-2 bg-white border-outlines rounded-md max-w-6xl mx-auto">
           <div className="m-4">
             <h3>Upload Pictures to create you board</h3>
-            <p className="">
+            <p className="text-gray-400">
               Choose what content you want to put into your board
             </p>
           </div>
@@ -171,11 +171,8 @@ const Publish = ({ files, setPageState }: PublishProps) => {
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between">
           <div>
-            <h3 className="font-bold">Your New Glasspins</h3>
-            <p className="inline">
-              Select which ones to keep and unselect which ones to exclude from
-              your board
-            </p>
+            <h2 className="font-bold text-gray-600">Your New Glasspins</h2>
+            
           </div>
         </div>
 

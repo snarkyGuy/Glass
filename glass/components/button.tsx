@@ -1,5 +1,4 @@
 import { DetailedHTMLProps, ButtonHTMLAttributes } from "react";
-import { HoverShadow } from "./hover-shadow";
 import { LoadingSpinner } from "./loading-spinner";
 
 export type ButtonProps = DetailedHTMLProps<

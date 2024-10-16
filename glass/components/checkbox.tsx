@@ -15,7 +15,7 @@ export const Checkbox = ({ checked, id, label, onChange }: CheckboxProps) => {
         value=""
         onChange={onChange}
       />
-      <label htmlFor={id} className="mx-4">
+      <label htmlFor={id} className="text-gray-500 mx-4">
         {label}
       </label>
     </div>

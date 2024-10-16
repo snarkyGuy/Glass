@@ -10,7 +10,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Masonry from "react-masonry-css";
-import { Sort } from "assets/sort";
 import { Thumb } from "assets/thumb";
 import {
   useAccount,
@@ -61,12 +60,12 @@ export default function Glassboards() {
             <p className="inline">{owner}</p>
           </div>
 
-          <div className="flex gap-2">
-            <p className="text-outlines">Votes</p>
+          <div className="flex gap-2 text-gray-600">
+            <p >Votes</p>
             <h3>{formatTripleDigis(numVotes.toNumber())}</h3>
-            <p className="text-outlines">Pins</p>
+            <p >Pins</p>
             <h3>{formatTripleDigis(numPins.toNumber())}</h3>
-            <p className="text-outlines">Items</p>
+            <p >Items</p>
             <h3>{formatTripleDigis(numGlasspins)}</h3>
           </div>
         </div>
@@ -83,6 +82,7 @@ export default function Glassboards() {
                 GlasspinId={GlasspinId}
                 onVote={() => refetchGlassboard()}
                 boardOwner={Glassboard?.owner ?? ""}
+                name={title}
               />
             ))}
           </Masonry>
@@ -96,12 +96,14 @@ type GlasspinCardProps = {
   GlasspinId: number;
   boardOwner: string;
   onVote: () => Promise<any>;
+  name: string;
 };
 
 const GlasspinCard = ({
   GlasspinId,
   boardOwner,
   onVote,
+  name
 }: GlasspinCardProps) => {
   const { address } = useAccount();
   const chainId = useChainId();
@@ -123,6 +125,8 @@ const GlasspinCard = ({
     },
     enabled: !!tokenUri,
   });
+
+  const title= name
 
   const { data: voted, refetch: refetchVoted } = useContractRead({
     address: GlasspinContract as `0x${string}`,
@@ -254,7 +258,7 @@ const GlasspinCard = ({
 
         <div className="flex justify-center items-center gap-2">
           {" "}
-          <h3 className="cursor-pointer hover:text-xl" onClick={() => setShowPinModal(true)}>
+          <h3 className="cursor-pointer hover:text-2xl" onClick={() => setShowPinModal(true)}>
             Pin
           </h3>
         </div>
@@ -268,10 +272,10 @@ const GlasspinCard = ({
       <PinSingleModal
         isOpen={showPinModal}
         close={() => setShowPinModal(false)}
-        title={""}
         imageUrl={Glasspin ?? ""}
         GlasspinId={GlasspinId}
         boardOwner={boardOwner}
+        title={name}
       />
     </div>
   );

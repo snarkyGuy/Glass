@@ -75,7 +75,7 @@ export const CreateGlassboardModal = ({
 
   const loadingStateString = {
     ipfs: "Uploading to IPFS",
-    mint: "Confirm in wallet...",
+    mint: "Confirming  transaction...",
     initial: "Publish Glassboard",
   }[loadingState];
 
@@ -155,7 +155,6 @@ export const CreateGlassboardModal = ({
     <Modal isOpen={isOpen} onDismiss={close} >
       <div className="m-4">
         <div className="flex justify-between mb-4">
-          <div></div>
           <IconButton className="" onClick={close}>
             <Close />
           </IconButton>
@@ -166,7 +165,7 @@ export const CreateGlassboardModal = ({
             <h2 className="mb-4">Publish</h2>
             {/* <p className="font-bold text-lg"></p> */}
             <p className="text-md">
-              <p className="text-md">
+              <p className="text-md text-gray-400">
                 To create your Glassboard, you&apos;ll need to pay for each
                 Glasspin you&apos;ve added, along with a fee for setting up the
                 Glassboard.
@@ -187,7 +186,7 @@ export const CreateGlassboardModal = ({
 
             <p className="text-md mt-4">Glasspin Fees</p>
             <div className="flex justify-between">
-              <h3 className="text-gray-500">Pins (x{numPins})</h3>
+              <h3 className="text-gray-500">Pins ({numPins})</h3>
               <h3 className="">
                 {ethers.utils
                   .formatEther(totalPinFee.toString() ?? "0")
@@ -219,7 +218,7 @@ export const CreateGlassboardModal = ({
                     {loadingStateString}
                   </Button>
                 ) : (
-                  <NavigationButton href="/dashboard">
+                  <NavigationButton href="/mydashboard">
                     Go to Dashboard
                   </NavigationButton>
                 )}
