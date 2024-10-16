@@ -15,7 +15,7 @@ export const Header = () => {
   }
 
   return (
-    <header className="bg-[#ffd0d0] px-8">
+    <header style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}  className="bg-[#ffd0d0] px-8">
       <div className="max-w-6xl mx-auto flex justify-between">
         <div className="flex items-center gap-8 py-4">
       

@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Close } from "svg/close";
+import { Close } from "assets/close";
 import { IconButton } from "./icon-button";
 import { Modal } from "./modal";
-import { ModalOption } from "./modal-option";
+import { ModalOption } from "./modalOption";
 
 type CreateGlassboardTypeModalProps = {
   showDialog: boolean;
@@ -31,13 +31,11 @@ export const CreateGlassboardTypeModal = ({
 
         <div className="h-0.5 -mx-4 bg-outlines my-4" />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="gap-4">
           <Link href="/create-Glassboard">
             <ModalOption>From uploaded images</ModalOption>
           </Link>
-          <ModalOption disabled>
-            From another Glassboard (coming soon)
-          </ModalOption>
+         
 
         </div>
       </div>

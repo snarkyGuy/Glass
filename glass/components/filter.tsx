@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Button } from "./button";
 
 type FilterProps = {
   children: React.ReactNode;

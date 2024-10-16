@@ -10,7 +10,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      headers: ["Playa", "sans-serif"],
+      akaya: ['"Akaya Kanadaka"', 'system-ui', 'sans-serif'],
     },
     extend: {
       colors: {

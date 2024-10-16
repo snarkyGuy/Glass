@@ -1,7 +1,7 @@
-import { Close } from "svg/close";
+import { Close } from "assets/close";
 import { IconButton } from "./icon-button";
 import { Modal } from "./modal";
-import Image from "next/image";
+
 import {
   useAccount,
   useChainId,
@@ -15,7 +15,7 @@ import { useState } from "react";
 import { Glasspin } from "../pages/create-Glassboard";
 import { contracts } from "constants/contracts";
 import { PinataSDK } from "pinata-web3";
-import { NavigationButton } from "./navigation-button";
+import { NavigationButton } from "./navigation";
 
 // Environment variable for security
 
@@ -152,7 +152,7 @@ export const CreateGlassboardModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onDismiss={close}>
+    <Modal isOpen={isOpen} onDismiss={close} >
       <div className="m-4">
         <div className="flex justify-between mb-4">
           <div></div>
@@ -161,20 +161,20 @@ export const CreateGlassboardModal = ({
           </IconButton>
         </div>
 
-        <div className="flex gap-4">
-          <div className="w-full">
+      
+      <div className="w-full flex flex-col justify-center ">
             <h2 className="mb-4">Publish</h2>
             {/* <p className="font-bold text-lg"></p> */}
-            <p className="text-sm">
-              <p className="text-sm">
+            <p className="text-md">
+              <p className="text-md">
                 To create your Glassboard, you&apos;ll need to pay for each
                 Glasspin you&apos;ve added, along with a fee for setting up the
                 Glassboard.
               </p>
             </p>
-          </div>
-          <div className="w-full">
-            <p className="text-sm mt-4">Glassboard Fee</p>
+          
+      <div className="w-full flex flex-col justify-center ">
+            <p className="text-md mt-4">Glassboard Fee</p>
             <div className="flex justify-between">
               <h3 className="text-gray-500">{name}</h3>
               <h3 className="">
@@ -185,7 +185,7 @@ export const CreateGlassboardModal = ({
               </h3>
             </div>
 
-            <p className="text-sm mt-4">Glasspin Fees</p>
+            <p className="text-md mt-4">Glasspin Fees</p>
             <div className="flex justify-between">
               <h3 className="text-gray-500">Pins (x{numPins})</h3>
               <h3 className="">

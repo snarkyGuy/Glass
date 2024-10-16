@@ -10,17 +10,17 @@ import { Button } from "components/button";
 import { useState } from "react";
 import { IconButton } from "components/icon-button";
 import Link from "next/link";
-import { Sort } from "svg/sort";
+import { Sort } from "assets/sort";
 import { GlassBoardABI, GlasspinABI } from "contracts";
 import { BigNumber } from "ethers";
-import { Thumb } from "svg/thumb";
+import { Thumb } from "assets/thumb";
 import { useQuery } from "@tanstack/react-query";
 import Masonry from "react-masonry-css";
 import { formatTripleDigis } from "helpers/formatters";
-import { CreateGlassboardTypeModal } from "../components/create-glassboard-type-modal"
+import { CreateGlassboardTypeModal } from "../components/glassboard-type-modal"
 import { contracts } from "constants/contracts";
 import Head from "next/head";
-import { Footer } from "components/footer";
+
 
 export default function Home() {
   const chainId = useChainId();
@@ -52,12 +52,12 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Glassboard</title>
+        <title >Glassboard</title>
       </Head>
-      <main className="max-w-6xl mx-auto">
-        <h1 className=" mt-20 mb-6 text-white text-center">A platform for social pinning and creative market discovery.</h1>
+      <main style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}  className="max-w-6xl mx-auto">
+        <h1  className=" mt-20 mb-6 text-white text-center">A platform for social pinning and creative market discovery.</h1>
 
-        <div className="flex items-center mt-2  justify-between">
+        <div   className="flex items-center mt-2 space-x-6  justify-center">
           <Filter>
             <FilterTab filter="pins" isDefault>
               <div className="flex items-center gap-2">
@@ -71,14 +71,9 @@ export default function Home() {
                 <Sort />
               </div>
             </FilterTab>
-            <FilterTab filter="latest">
-              <div className="flex items-center gap-2">
-                <p>Latest</p>
-                <Sort />
-              </div>
-            </FilterTab>
+           
           </Filter>
-          <Button onClick={open}>Create Glassboard</Button>
+          <Button onClick={open}>Create New Glassboard</Button>
         </div>
 
         <div className="grid sm:grid-cols-1 gap-4 md:grid-cols-2 mt-16">
@@ -108,7 +103,7 @@ export default function Home() {
 
         <CreateGlassboardTypeModal showDialog={showDialog} close={close} />
       </main>
-      <Footer />
+      
     </div>
   );
 }
@@ -132,7 +127,7 @@ const Glassboard = ({
   refetch,
 }: GlassboardProps) => {
   return (
-    <div className="border-2 bg-white border-outlines rounded-xl overflow-hidden max-h-[800px]">
+    <div className="border-2  bg-white border-outlines rounded-xl overflow-hidden max-h-[800px]">
       <div className="flex justify-between bg-[#faebeb] px-4 py-2">
         <Link href={`/GlassBoards/${owner}/${index}`}>
           <h3 className="text-gray-700">{title}</h3>
@@ -278,19 +273,11 @@ const GlasspinCard = ({ GlasspinId, onVote }: GlasspinCardProps) => {
               <h3 className="">{formatTripleDigis(pins)}</h3>
             </div>
           </div>
-          <IconButton
-            onClick={onClickVote}
-            className={`hover:bg-black px-4 rounded-full 
-          ${
-            hasVoted
-              ? "bg-red-300 enabled:hover:bg-red-500"
-              : "bg-secondary-brand hover:bg-primary-brand"
-          }`}
-          >
-            <div className={`${hasVoted ? "rotate-180" : ""}`}>
-              <Thumb />
-            </div>
-          </IconButton>
+          <IconButton onClick={onClickVote} className="bg-secondary-brand">
+          <div>
+            <Thumb />
+          </div>
+        </IconButton>
         </div>
       </div>
     </div>

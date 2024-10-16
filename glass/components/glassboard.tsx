@@ -5,7 +5,7 @@ import { BigNumber } from "ethers";
 import { formatTripleDigis } from "helpers/formatters";
 import Link from "next/link";
 import Masonry from "react-masonry-css";
-import { Thumb } from "svg/thumb";
+import { Thumb } from "assets/thumb";
 import {
   useContractRead,
   usePrepareContractWrite,

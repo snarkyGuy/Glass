@@ -1,7 +1,7 @@
 import { Button } from "components/button";
 import { FilterTab, Filter } from "components/filter";
 import Link from "next/link";
-import { Sort } from "svg/sort";
+import { Sort } from "assets/sort";
 import { useState } from "react";
 import {
   useAccount,
@@ -15,8 +15,8 @@ import { BigNumber } from "ethers";
 import Masonry from "react-masonry-css";
 import { useQuery } from "@tanstack/react-query";
 import { IconButton } from "components/icon-button";
-import { Thumb } from "svg/thumb";
-import { CreateGlassboardTypeModal } from "components/create-glassboard-type-modal";
+import { Thumb } from "assets/thumb";
+import { CreateGlassboardTypeModal } from "components/glassboard-type-modal";
 import { contracts } from "constants/contracts";
 import Head from "next/head";
 import { Select } from "components/select";
@@ -38,54 +38,23 @@ export default function Dashboard() {
   const close = () => setShowDialog(false);
 
   return (
-    <div>
+    <div style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}>
       <Head>
         <title>Dashboard</title>
       </Head>
       <main className="max-w-6xl mx-auto">
-        <h1 className="my-12 text-center">Dashboard</h1>
+        <h1 className="my-12 text-center">My Dashboard</h1>
 
-        <div className="flex justify-between mb-16">
+        <div className="flex justify-end mb-16">
           <div className="flex gap-8">
-            <TabBarItem
-              currentSlot={slot}
-              slot="GlassBoards"
-              onClick={() => setSlot("GlassBoards")}
-            >
-              Glassboards
-            </TabBarItem>
             <TabBarItem
               currentSlot={slot}
               slot="settings"
               onClick={() => setSlot("settings")}
             >
-              Settings
+              Payment Setting
             </TabBarItem>
-          </div>
 
-          <div className="flex gap-4">
-            <div className="flex items-center bg-[#faebeb]  gap-4 h-fit">
-              <Filter>
-                <FilterTab filter="pins" isDefault>
-                  <div className="flex items-center gap-2">
-                    <p>Most Pins</p>
-                    <Sort />
-                  </div>
-                </FilterTab>
-                <FilterTab filter="votes">
-                  <div className="flex items-center gap-2">
-                    <p>Most Votes</p>
-                    <Sort />
-                  </div>
-                </FilterTab>
-                <FilterTab filter="latest">
-                  <div className="flex items-center gap-2">
-                    <p>Latest</p>
-                    <Sort />
-                  </div>
-                </FilterTab>
-              </Filter>
-            </div>
             <Button onClick={open}>Create Glassboard</Button>
           </div>
         </div>
@@ -154,8 +123,7 @@ const GlassboardSlot = () => {
   console.log("Glassboards:", glassboards);
 
   return (
-    <div>
-     
+    <div style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}>
       {glassboards.map((glassboard, index) => {
         const GlasspinIds = glassboard.GlasspinIds.map((n: BigNumber) =>
           n.toNumber()
@@ -181,7 +149,6 @@ const GlassboardSlot = () => {
   );
 };
 
-
 type GlassboardProps = {
   title: string;
   GlasspinIds: number[];
@@ -202,11 +169,14 @@ const Glassboard = ({
   const { address } = useAccount();
 
   return (
-    <div className="border-2 bg-white border-outlines rounded-xl overflow-hidden">
+    <div
+      style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}
+      className="border-2 bg-white border-outlines rounded-xl overflow-hidden"
+    >
       <div className="flex justify-between text-gray-700 bg-[#faebeb] px-8">
-        <Link href={`/Glassboards/${address}/${index}`}>
-          <h3 className=" py-2">{title}</h3>
-        </Link>
+      
+          <h3 className="py-2">GlassBoards</h3>
+      
 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -238,7 +208,7 @@ const Glassboard = ({
           <p className="">Total items</p>
           <h3 className="">
             {GlasspinIds.length.toLocaleString("en-US", {
-              minimumIntegerDigits: 1 ,
+              minimumIntegerDigits: 1,
               useGrouping: false,
             })}
           </h3>
@@ -285,9 +255,9 @@ const GlasspinCard = ({ GlasspinId }: GlasspinCardProps) => {
     queryKey: ["Glasspin", GlasspinId],
     queryFn: async () => {
       // Convert IPFS URI to URL using Pinata's gateway
-      const url = (tokenUri as string);
+      const url = tokenUri as string;
       console.log(url);
-  
+
       return url;
     },
     enabled: !!tokenUri,
@@ -309,9 +279,6 @@ const GlasspinCard = ({ GlasspinId }: GlasspinCardProps) => {
     enabled: votes !== undefined && voteCount === 0,
   });
   const { writeAsync: vote } = useContractWrite(voteConfig);
-
-
-
 
   const onClickVote = async () => {
     const sendTransactionResult = await vote?.();
@@ -349,12 +316,8 @@ const GlasspinCard = ({ GlasspinId }: GlasspinCardProps) => {
             </h3>
           </div>
         </div>
-        <IconButton
-          onClick={onClickVote}
-          className={`bg-secondary-brand  px-4 rounded-full
-          ${hasVoted ? "bg-red-300 hover:bg-red-500" : ""}`}
-        >
-          <div className={`${hasVoted ? "rotate-180" : ""}`}>
+        <IconButton onClick={onClickVote}>
+          <div>
             <Thumb />
           </div>
         </IconButton>

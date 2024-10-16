@@ -21,10 +21,17 @@ export default function Document() {
           sizes="16x16"
           href="/favicon-16x16.png"
         />
+        {/* Preconnect and Google Fonts link */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com"  />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Akaya+Kanadaka&display=swap"
+          rel="stylesheet"
+        />
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <body>
-        <Main />
+        <Main  />
         <NextScript />
       </body>
     </Html>

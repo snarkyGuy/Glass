@@ -1,209 +1,214 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.18;
-import "./GlassPin.sol";
 
-contract GlassBoard {
-    address public GlasspinContract;
-    address immutable deployer = msg.sender;
-    uint public creatorPinCut = 75;
-    uint public denominator = 100;
+import "./GlassPin.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+contract GlassBoard is ReentrancyGuard {
+    address public glassPinContract;
+    address public immutable deployer;
+    uint256 public creatorPinFee = 75; // Creator's pin fee in basis points (75/10000)
+    uint256 public feeDenominator = 10000; // For calculating fees in basis points
 
     struct Board {
         string name;
-        uint[] GlasspinIds;
-        uint[] externalGlasspinIds;
+        uint256[] pinIds;
+        uint256[] externalPinIds;
         address owner;
     }
 
-    struct BoardWithMetadata {
+    struct BoardMetadata {
         string name;
-        uint[] GlasspinIds;
-        uint[] externalGlasspinIds;
+        uint256[] pinIds;
+        uint256[] externalPinIds;
         address owner;
-        uint votes;
-        uint pins;
+        uint256 totalVotes;
+        uint256 totalPins;
     }
 
-    mapping(address => Board[]) public Glassboards;
-    mapping(address => bool) public hasGlassboard;
-    address[] public addressesWithGlassboards;
-    uint public numGlassboards;
-    mapping(address => bool) public payoutApecoin;
+    mapping(address => Board[]) public userBoards;
+    mapping(address => bool) public hasBoard;
+    address[] public usersWithBoards;
+    uint256 public totalBoards;
+    mapping(address => bool) public allowPayoutInApecoin;
 
-    constructor(address _GlasspinContract) {
-        GlasspinContract = _GlasspinContract;
+    // Events
+    event BoardCreated(address indexed creator, uint256 indexed boardIndex, string name);
+    event BoardDeleted(address indexed owner, uint256 indexed boardIndex);
+    event PinAdded(address indexed pinner, uint256 indexed boardIndex, uint256 pinId);
+    event PinRemoved(address indexed pinner, uint256 indexed boardIndex, uint256 pinId);
+    event CreatorFeeUpdated(uint256 newFee);
+    event Withdraw(address indexed recipient, uint256 amount);
+
+    constructor(address _glassPinContract) {
+        glassPinContract = _glassPinContract;
+        deployer = msg.sender;
     }
 
-    function createGlassboard(
+    modifier onlyOwner() {
+        require(msg.sender == deployer, "Only deployer can perform this action");
+        _;
+    }
+
+    modifier boardExists(address owner, uint256 boardIndex) {
+        require(boardIndex < userBoards[owner].length, "Invalid board index");
+        _;
+    }
+
+    function createBoard(
         string memory name,
-        string[] memory tokenURIs
-    ) public returns (uint) {
-        Board memory board = Board({
+        string[] memory pinURIs
+    ) external nonReentrant returns (uint256) {
+        require(bytes(name).length > 0, "Board name cannot be empty");
+        Board memory newBoard = Board({
             name: name,
-            GlasspinIds: new uint[](tokenURIs.length),
-            externalGlasspinIds: new uint[](0) ,
+            pinIds: new uint256[](pinURIs.length),
+            externalPinIds: new uint[](0) ,
             owner: msg.sender
         });
 
-        for (uint i = 0; i < tokenURIs.length; i++) {
-            uint tokenId = GlassPin(GlasspinContract).createGlassPin(
+        for (uint256 i = 0; i < pinURIs.length; i++) {
+            uint256 pinId = GlassPin(glassPinContract).createGlassPin(
                 msg.sender,
-                tokenURIs[i]
+                pinURIs[i]
             );
-            board.GlasspinIds[i] = tokenId;
+            newBoard.pinIds[i] = pinId;
         }
 
-        Glassboards[msg.sender].push(board);
+        userBoards[msg.sender].push(newBoard);
 
-        if (!hasGlassboard[msg.sender]) {
-            hasGlassboard[msg.sender] = true;
-            addressesWithGlassboards.push(msg.sender);
+        if (!hasBoard[msg.sender]) {
+            hasBoard[msg.sender] = true;
+            usersWithBoards.push(msg.sender);
         }
 
-        numGlassboards++;
+        totalBoards++;
 
-        return Glassboards[msg.sender].length - 1;
+        emit BoardCreated(msg.sender, userBoards[msg.sender].length - 1, name);
+        return userBoards[msg.sender].length - 1;
     }
 
-    function deleteGlassboard(uint index) public {
-        require(index < Glassboards[msg.sender].length, "Invalid index");
-        numGlassboards--;
+    function deleteBoard(uint256 index) external nonReentrant boardExists(msg.sender, index) {
+        totalBoards--;
+        userBoards[msg.sender][index] = userBoards[msg.sender][userBoards[msg.sender].length - 1];
+        userBoards[msg.sender].pop();
 
-        Glassboards[msg.sender][index] = Glassboards[msg.sender][
-            Glassboards[msg.sender].length - 1
-        ];
-        Glassboards[msg.sender].pop();
+        emit BoardDeleted(msg.sender, index);
     }
 
-    function updateGlassboardName(uint index, string memory name) public {
-        Glassboards[msg.sender][index].name = name;
+    function updateBoardName(uint256 index, string memory newName) external boardExists(msg.sender, index) {
+        require(bytes(newName).length > 0, "Name cannot be empty");
+        userBoards[msg.sender][index].name = newName;
     }
 
-    function getGlassboard(
-        address owner,
-        uint index
-    ) public view returns (BoardWithMetadata memory) {
-        return applyMetadataToBoard(Glassboards[owner][index]);
-    }
-
-    function getGlassboards(
-        address owner
-    ) public view returns (BoardWithMetadata[] memory) {
-        Board[] memory boards = Glassboards[owner];
-        return applyMetadataToBoards(boards);
-    }
-
-    function getAllGlassboards()
-        public
+    function getBoard(address owner, uint256 index)
+        external
         view
-        returns (BoardWithMetadata[] memory)
+        boardExists(owner, index)
+        returns (BoardMetadata memory)
     {
-        Board[] memory allGlassboards = new Board[](numGlassboards);
+        return _generateBoardMetadata(userBoards[owner][index]);
+    }
 
-        uint index = 0;
-        for (uint i = 0; i < addressesWithGlassboards.length; i++) {
-            address owner = addressesWithGlassboards[i];
-            Board[] memory boards = Glassboards[owner];
-            for (uint j = 0; j < boards.length; j++) {
-                allGlassboards[index] = boards[j];
-                index++;
+    function getUserBoards(address owner)
+        external
+        view
+        returns (BoardMetadata[] memory)
+    {
+        Board[] memory boards = userBoards[owner];
+        return _generateBoardsMetadata(boards);
+    }
+
+    function getAllBoards() external view returns (BoardMetadata[] memory) {
+        Board[] memory allBoards = new Board[](totalBoards);
+        uint256 currentIndex = 0;
+
+        for (uint256 i = 0; i < usersWithBoards.length; i++) {
+            address boardOwner = usersWithBoards[i];
+            Board[] memory boards = userBoards[boardOwner];
+            for (uint256 j = 0; j < boards.length; j++) {
+                allBoards[currentIndex] = boards[j];
+                currentIndex++;
             }
         }
 
-        return applyMetadataToBoards(allGlassboards);
+        return _generateBoardsMetadata(allBoards);
     }
 
-    function pinToBoard(
-        address sourceBoardOwner,
-        uint sourceMonnpinId,
-        uint targetBoardIndex
-    ) public {
-        // Removed pin fee requirement
-        address creator = GlassPin(GlasspinContract).ownerOf(sourceMonnpinId);
-        uint creatorCut = (0 * creatorPinCut) / denominator; // No fee
+    function pinToBoard(uint256 pinId, uint256 boardIndex) external boardExists(msg.sender, boardIndex) {
+        Board storage targetBoard = userBoards[msg.sender][boardIndex];
+        targetBoard.externalPinIds.push(pinId);
 
-        address pinner = msg.sender;
-        Board storage targetBoard = Glassboards[pinner][targetBoardIndex];
-        targetBoard.externalGlasspinIds.push(sourceMonnpinId);
+        GlassPin(glassPinContract).pin(pinId);
 
-        GlassPin(GlasspinContract).pin(sourceMonnpinId);
+        emit PinAdded(msg.sender, boardIndex, pinId);
     }
 
-    function unpinFromBoard(
-        uint sourceMonnpinId,
-        uint targetBoardIndex
-    ) public {
-        address pinner = msg.sender;
-        Board storage targetBoard = Glassboards[pinner][targetBoardIndex];
-        uint[] storage externalGlasspinIds = targetBoard.externalGlasspinIds;
+    function unpinFromBoard(uint256 pinId, uint256 boardIndex) external boardExists(msg.sender, boardIndex) {
+        Board storage targetBoard = userBoards[msg.sender][boardIndex];
+        uint256[] storage externalPinIds = targetBoard.externalPinIds;
 
-        for (uint i = 0; i < externalGlasspinIds.length; i++) {
-            if (externalGlasspinIds[i] == sourceMonnpinId) {
-                externalGlasspinIds[i] = externalGlasspinIds[
-                    externalGlasspinIds.length - 1
-                ];
-                externalGlasspinIds.pop();
+        for (uint256 i = 0; i < externalPinIds.length; i++) {
+            if (externalPinIds[i] == pinId) {
+                externalPinIds[i] = externalPinIds[externalPinIds.length - 1];
+                externalPinIds.pop();
                 break;
             }
         }
 
-        GlassPin(GlasspinContract).unpin(sourceMonnpinId);
+        GlassPin(glassPinContract).unpin(pinId);
+
+        emit PinRemoved(msg.sender, boardIndex, pinId);
     }
 
-    function withdraw(address payable recipient, uint amount) public {
-        require(msg.sender == deployer, "Only deployer can withdraw");
+    function updateCreatorFee(uint256 newFee) external onlyOwner {
+        require(newFee <= 1000, "Fee too high"); // Max 10% (1000 basis points)
+        creatorPinFee = newFee;
+        emit CreatorFeeUpdated(newFee);
+    }
+
+    function withdraw(address payable recipient, uint256 amount) external onlyOwner nonReentrant {
+        require(address(this).balance >= amount, "Insufficient balance");
         recipient.transfer(amount);
+
+        emit Withdraw(recipient, amount);
     }
 
-    function applyMetadataToBoards(
-        Board[] memory boards
-    ) internal view returns (BoardWithMetadata[] memory) {
-        BoardWithMetadata[] memory boardsWithMetadata = new BoardWithMetadata[](
-            boards.length
-        );
-        for (uint i = 0; i < boards.length; i++) {
-            Board memory board = boards[i];
-            uint votes = 0;
-            uint pins = 0;
-            for (uint j = 0; j < board.GlasspinIds.length; j++) {
-                uint GlasspinId = board.GlasspinIds[j];
-                votes += GlassPin(GlasspinContract).getVotes(GlasspinId);
-                pins += GlassPin(GlasspinContract).getPins(GlasspinId);
-            }
-
-            boardsWithMetadata[i] = BoardWithMetadata({
-                name: board.name,
-                GlasspinIds: board.GlasspinIds,
-                externalGlasspinIds: board.externalGlasspinIds,
-                owner: board.owner,
-                votes: votes,
-                pins: pins
-            });
+    function _generateBoardsMetadata(Board[] memory boards)
+        internal
+        view
+        returns (BoardMetadata[] memory)
+    {
+        BoardMetadata[] memory boardsMetadata = new BoardMetadata[](boards.length);
+        for (uint256 i = 0; i < boards.length; i++) {
+            boardsMetadata[i] = _generateBoardMetadata(boards[i]);
         }
-
-        return boardsWithMetadata;
+        return boardsMetadata;
     }
 
-    function applyMetadataToBoard(
-        Board memory board
-    ) internal view returns (BoardWithMetadata memory) {
-        uint votes = 0;
-        uint pins = 0;
-        for (uint j = 0; j < board.GlasspinIds.length; j++) {
-            uint GlasspinId = board.GlasspinIds[j];
-            votes += GlassPin(GlasspinContract).getVotes(GlasspinId);
-            pins += GlassPin(GlasspinContract).getPins(GlasspinId);
+    function _generateBoardMetadata(Board memory board)
+        internal
+        view
+        returns (BoardMetadata memory)
+    {
+        uint256 votes = 0;
+        uint256 pins = 0;
+        for (uint256 j = 0; j < board.pinIds.length; j++) {
+            uint256 pinId = board.pinIds[j];
+            votes += GlassPin(glassPinContract).getVotes(pinId);
+            pins += GlassPin(glassPinContract).getPins(pinId);
         }
 
-        BoardWithMetadata memory boardsWithMetadata = BoardWithMetadata({
+        return BoardMetadata({
             name: board.name,
-            GlasspinIds: board.GlasspinIds,
-            externalGlasspinIds: board.externalGlasspinIds,
+            pinIds: board.pinIds,
+            externalPinIds: board.externalPinIds,
             owner: board.owner,
-            votes: votes,
-            pins: pins
+            totalVotes: votes,
+            totalPins: pins
         });
-
-        return boardsWithMetadata;
     }
+
+    // Allow contract to accept ETH
+    receive() external payable {}
 }

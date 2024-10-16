@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Filter, FilterTab } from "components/filter";
 import { IconButton } from "components/icon-button";
-import { PinSingleModal } from "components/pin-single-modal";
+import { PinSingleModal } from "components/pinModal";
 import { contracts } from "constants/contracts";
 import { GlassBoardABI, GlasspinABI } from "contracts";
 import { BigNumber } from "ethers";
@@ -10,8 +10,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Masonry from "react-masonry-css";
-import { Sort } from "svg/sort";
-import { Thumb } from "svg/thumb";
+import { Sort } from "assets/sort";
+import { Thumb } from "assets/thumb";
 import {
   useAccount,
   useChainId,
@@ -48,36 +48,12 @@ export default function Glassboards() {
   const title = Glassboard?.name ?? "";
 
   return (
-    <div>
+    <div style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}>
       <Head>
         <title>{title}</title>
       </Head>
       <main className="max-w-6xl mx-auto">
         <h1 className="m-12 text-center">{title}</h1>
-
-        <div className="flex items-center justify-between">
-          <div></div>
-          <Filter>
-            <FilterTab filter="pins" isDefault>
-              <div className="flex items-center gap-2">
-                <p>Most Pins</p>
-                <Sort />
-              </div>
-            </FilterTab>
-            <FilterTab filter="votes">
-              <div className="flex items-center gap-2">
-                <p>Most Votes</p>
-                <Sort />
-              </div>
-            </FilterTab>
-            <FilterTab filter="latest">
-              <div className="flex items-center gap-2">
-                <p>Latest</p>
-                <Sort />
-              </div>
-            </FilterTab>
-          </Filter>
-        </div>
 
         <div className="flex justify-between my-10 mx-auto">
           <div className="flex gap-4">
@@ -245,7 +221,10 @@ const GlasspinCard = ({
   const [showPinModal, setShowPinModal] = useState(false);
 
   return (
-    <div className="border-2 bg-slate-50 border-outlines rounded-2xl relative overflow-hidden mb-4">
+    <div
+      style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}
+      className="border-2 border-outlines bg-white rounded-2xl relative overflow-hidden mb-4"
+    >
       <div className="relative">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={Glasspin} alt="" />
@@ -275,18 +254,12 @@ const GlasspinCard = ({
 
         <div className="flex justify-center items-center gap-2">
           {" "}
-          <h3 className="cursor-pointer" onClick={() => setShowPinModal(true)}>Pin</h3>
+          <h3 className="cursor-pointer hover:text-xl" onClick={() => setShowPinModal(true)}>
+            Pin
+          </h3>
         </div>
-        <IconButton
-          onClick={onClickVote}
-          className={`hover:bg-black px-4 rounded-full
-          ${
-            hasVoted
-              ? "bg-red-300 hover:bg-red-500"
-              : "bg-white hover:bg-primary-brand"
-          }`}
-        >
-          <div className={`${hasVoted ? "rotate-180" : ""}`}>
+        <IconButton onClick={onClickVote} className="bg-secondary-brand">
+          <div>
             <Thumb />
           </div>
         </IconButton>

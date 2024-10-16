@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { Button, ButtonProps } from "./button";
-import { HoverShadow } from "./hover-shadow";
 
 export const ModalOption = ({ children, disabled }: ButtonProps) => {
   return (

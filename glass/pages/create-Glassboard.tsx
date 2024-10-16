@@ -1,13 +1,13 @@
 import { Button } from "components/button";
 import { Checkbox } from "components/checkbox";
 import { IconButton } from "components/icon-button";
-import { NavigationButton } from "components/navigation-button";
+import { NavigationButton } from "components/navigation";
 import { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import Masonry from "react-masonry-css";
-import { Check } from "svg/check";
-import { PlusCross } from "svg/plus-cross";
-import { CreateGlassboardModal } from "components/create-glassboard-modal";
+import { Check } from "assets/check";
+import { PlusCross } from "assets/plus-cross";
+import { CreateGlassboardModal } from "components/glassboard-modal";
 import Head from "next/head";
 
 const fileTypes = ["JPG", "JPEG", "PNG", "GIF"];
@@ -46,7 +46,7 @@ const Upload = ({ files, setFiles, setPageState }: UploadProps) => {
       <Head>
         <title>Create Glassboard</title>
       </Head>
-      <main>
+      <main style={{ fontFamily: '"Akaya Kanadaka", system-ui' }} >
         <h1 className="m-12 text-center">Create Glassboard</h1>
 
         <div className="flex justify-between mb-16 max-w-6xl mx-auto">
@@ -98,11 +98,16 @@ const Upload = ({ files, setFiles, setPageState }: UploadProps) => {
           </div>
 
           <div className="w-3/4 mx-auto mb-8">
-          
+            <Checkbox
+              id="my-pictures"
+              checked={myPictures}
+              label="These pictures are mine"
+              onChange={(e) => setMyPictures(e.target.checked)}
+            />
             <Checkbox
               id="community-guidelines"
               checked={communityGuidelines}
-              label="I own these pictures , I have read community guidelines"
+              label="I own these pictures ,I have read community guidelines"
               onChange={(e) => setCommunityGuidelines(e.target.checked)}
             />
           </div>
@@ -139,7 +144,7 @@ const Publish = ({ files, setPageState }: PublishProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <main>
+    <main style={{ fontFamily: '"Akaya Kanadaka", system-ui' }} >
       <div className="m-12 text-center relative h-12">
         <input
           className="w-full bg-background font-headers absolute top-0 left-0 bottom-0 outline-none text-5xl h-12
