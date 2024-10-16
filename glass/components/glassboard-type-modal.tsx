@@ -33,7 +33,7 @@ export const CreateGlassboardTypeModal = ({
 
         <div className="gap-4">
           <Link href="/create-Glassboard">
-            <ModalOption>From uploaded images</ModalOption>
+            <ModalOption>Uploaded Images</ModalOption>
           </Link>
          
 

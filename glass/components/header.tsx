@@ -23,7 +23,7 @@ export const Header = () => {
           
           <div className="text-md flex gap-8 h-full">
             <HeaderButton href="/">Home</HeaderButton>
-            <HeaderButton href="/dashboard">Dashboard</HeaderButton>
+            <HeaderButton href="/mydashboard">Dashboard</HeaderButton>
           </div>
         </div>
         <div className="py-4 flex gap-8 items-center">

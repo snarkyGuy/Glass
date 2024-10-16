@@ -46,7 +46,7 @@ const Upload = ({ files, setFiles, setPageState }: UploadProps) => {
       <Head>
         <title>Create Glassboard</title>
       </Head>
-      <main style={{ fontFamily: '"Akaya Kanadaka", system-ui' }} >
+      <main style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}>
         <h1 className="m-12 text-center">Create Glassboard</h1>
 
         <div className="flex justify-between mb-16 max-w-6xl mx-auto">
@@ -98,17 +98,15 @@ const Upload = ({ files, setFiles, setPageState }: UploadProps) => {
           </div>
 
           <div className="w-3/4 mx-auto mb-8">
-            <Checkbox
-              id="my-pictures"
-              checked={myPictures}
-              label="These pictures are mine"
-              onChange={(e) => setMyPictures(e.target.checked)}
-            />
+          
             <Checkbox
               id="community-guidelines"
               checked={communityGuidelines}
-              label="I own these pictures ,I have read community guidelines"
-              onChange={(e) => setCommunityGuidelines(e.target.checked)}
+              label="I confirm that I own these pictures and have reviewed the community guidelines."
+              onChange={(e) => {
+                setCommunityGuidelines(e.target.checked);
+                setMyPictures(true);
+              }}
             />
           </div>
         </div>
@@ -144,7 +142,7 @@ const Publish = ({ files, setPageState }: PublishProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <main style={{ fontFamily: '"Akaya Kanadaka", system-ui' }} >
+    <main style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}>
       <div className="m-12 text-center relative h-12">
         <input
           className="w-full bg-background font-headers absolute top-0 left-0 bottom-0 outline-none text-5xl h-12
@@ -179,8 +177,6 @@ const Publish = ({ files, setPageState }: PublishProps) => {
               your board
             </p>
           </div>
-
- 
         </div>
 
         <Masonry

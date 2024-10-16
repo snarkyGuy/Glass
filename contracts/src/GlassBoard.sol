@@ -30,7 +30,7 @@ contract GlassBoard is ReentrancyGuard {
     mapping(address => bool) public hasBoard;
     address[] public usersWithBoards;
     uint256 public totalBoards;
-    mapping(address => bool) public allowPayoutInApecoin;
+   
 
     // Events
     event BoardCreated(address indexed creator, uint256 indexed boardIndex, string name);
