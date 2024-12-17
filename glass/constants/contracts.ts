@@ -4,13 +4,18 @@ type Contracts = {
 };
 
 export const contracts: { [chainID: number]: Contracts } = {
-  // BTT Testnet
-  1029: {
-    GlasspinContract: "0xB4e6351E35F98D7B1Da712C8E53A6205319D729F",
-    GlassboardContract: "0x0E0016D5403C0349C717A8F09167a6e16900c222",
+
+  199: {
+    GlasspinContract: "0x30b9a26d1a3067e705b05049DC352DC7b0DF6187",
+    GlassboardContract: "0x1E24c464F3F96D9F1F06c46a5a063ED59f48Bc59",
   },
+
+  297: {
+    GlasspinContract: "0xa84289a50735206d78Aed407439fF51799f68E84",
+    GlassboardContract: "0x30b9a26d1a3067e705b05049DC352DC7b0DF6187",
+  },
+
   
 };
 
-// GlassPin deployed at address: 0xB4e6351E35F98D7B1Da712C8E53A6205319D729F
-// GlassBoard deployed at address: 0x0E0016D5403C0349C717A8F09167a6e16900c222
+

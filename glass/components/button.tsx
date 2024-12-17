@@ -20,7 +20,7 @@ export const Button = ({
       {...props}
       disabled={props.disabled || loading}
       className={`bg-[#faebeb]
-        text-gray-700 font-bold p-2 px-4 
+        text-gray-600 font-bold p-2 px-4 
     transition
         ${className}`}
     >

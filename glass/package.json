@@ -30,6 +30,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-drag-drop-files": "^2.3.9",
+    "react-loader-spinner": "^6.1.6",
     "react-masonry-css": "^1.0.16",
     "typescript": "4.9.5",
     "wagmi": "^0.11.x"

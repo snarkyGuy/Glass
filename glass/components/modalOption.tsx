@@ -5,7 +5,7 @@ export const ModalOption = ({ children, disabled }: ButtonProps) => {
   return (
     <Button
       disabled={disabled}
-      className="bg-transparent enabled:text-text-standard enabled:hover:bg-secondary-brand h-full w-full"
+      className="bg-transparent  p-10 enabled:text-gray-500 h-full w-full"
     >
       {children}
     </Button>

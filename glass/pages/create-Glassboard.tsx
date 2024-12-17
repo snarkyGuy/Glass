@@ -6,7 +6,7 @@ import { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import Masonry from "react-masonry-css";
 import { Check } from "assets/check";
-import { PlusCross } from "assets/plus-cross";
+import { MinusIcon } from "assets/MinusIcon";
 import { CreateGlassboardModal } from "components/glassboard-modal";
 import Head from "next/head";
 
@@ -47,10 +47,10 @@ const Upload = ({ files, setFiles, setPageState }: UploadProps) => {
         <title>Create Glassboard</title>
       </Head>
       <main style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}>
-        <h1 className="m-12 text-center">Create Glassboard</h1>
+        <h1 className="m-12 text-center text-gray-600">Create Glassboard</h1>
 
-        <div className="flex justify-between mb-16 max-w-6xl mx-auto">
-          <NavigationButton href="/">Back</NavigationButton>
+        <div className="flex mt-6  justify-between mb-16 max-w-6xl mx-auto">
+          <NavigationButton href="/">Previous</NavigationButton>
 
           <Button
             disabled={!canContinue}
@@ -62,14 +62,7 @@ const Upload = ({ files, setFiles, setPageState }: UploadProps) => {
           </Button>
         </div>
 
-        <div className="border-2 bg-white border-outlines rounded-md max-w-6xl mx-auto">
-          <div className="m-4">
-            <h3>Upload Pictures to create you board</h3>
-            <p className="text-gray-400">
-              Choose what content you want to put into your board
-            </p>
-          </div>
-
+        <div className="border-2 mx-auto bg-white border-outlines rounded-md max-w-6xl ">
           <div className="h-0.5 bg-outlines my-4" />
 
           <div className="w-3/4 mx-auto mb-8 flex gap-4 items-center">
@@ -80,9 +73,11 @@ const Upload = ({ files, setFiles, setPageState }: UploadProps) => {
                 types={fileTypes}
                 multiple
               >
-                <div className="border-black border-2 border-dashed min-h-[128px] py-4 rounded-md flex items-center justify-center">
+                <div className="border-gray-200 cursor-pointer border-2 p-8  min-h-[208px] py-4 rounded-md flex items-center justify-center">
                   {files.length === 0 ? (
-                    <p className="my-auto">Drag and drop</p>
+                    <p className="my-auto text-gray-500 text-xl">
+                      Choose a file or drag and drop it here
+                    </p>
                   ) : (
                     <div className="flex flex-col">
                       {files.map((file) => (
@@ -97,18 +92,19 @@ const Upload = ({ files, setFiles, setPageState }: UploadProps) => {
             </div>
           </div>
 
-          <div className="w-3/4 mx-auto mb-8">
-          
-            <Checkbox
-              id="community-guidelines"
-              checked={communityGuidelines}
-              label="I confirm that I own these pictures and have reviewed the community guidelines."
-              onChange={(e) => {
-                setCommunityGuidelines(e.target.checked);
-                setMyPictures(true);
-              }}
-            />
-          </div>
+          {files.length !== 0 ? (
+            <div className="w-3/4 mx-auto mb-8">
+              <Checkbox
+                id="community-guidelines"
+                checked={communityGuidelines}
+                label="I confirm that I own these pictures and have reviewed the community guidelines."
+                onChange={(e) => {
+                  setCommunityGuidelines(e.target.checked);
+                  setMyPictures(true);
+                }}
+              />
+            </div>
+          ) : null}
         </div>
       </main>
     </>
@@ -143,37 +139,24 @@ const Publish = ({ files, setPageState }: PublishProps) => {
 
   return (
     <main style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}>
-      <div className="m-12 text-center relative h-12">
-        <input
-          className="w-full bg-background font-headers absolute top-0 left-0 bottom-0 outline-none text-5xl h-12
-         text-center"
-          onFocus={() => setEnteringTitle(true)}
-          onBlur={() => setEnteringTitle(false)}
-          value={GlassboardName}
-          onChange={(e) => setGlassboardName(e.target.value)}
-        />
-        {showPlaceholder ? (
-          <div className="flex items-center justify-center">
-            <h1 className="relative pointer-events-none pl-2 pr-1 w-fit">
-              Glassboard NAME
-            </h1>
-            <div className="w-0.5 h-10 mb-2 relative bg-black invisible animate-blink" />
-          </div>
-        ) : null}
-      </div>
-
-      <div className="flex justify-between mb-16 max-w-6xl mx-auto">
-        <Button onClick={() => setPageState("upload")}>Back</Button>
-
-        <Button onClick={() => setIsModalOpen(true)}>Publish Glassboard</Button>
-      </div>
+      <div className="m-4 text-center relative h-16 "></div>
 
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between">
-          <div>
-            <h2 className="font-bold text-gray-600">Your New Glasspins</h2>
-            
-          </div>
+        <div className="relative">
+          <input
+            className="w-full text-gray-600 bg-background outline-none h-full text-start text-5xl"
+            onFocus={() => setEnteringTitle(true)}
+            onBlur={() => setEnteringTitle(false)}
+            value={GlassboardName}
+            onChange={(e) => setGlassboardName(e.target.value)}
+          />
+          {showPlaceholder && !GlassboardName && (
+            <div className="absolute top-0 left-0 flex items-center h-full pointer-events-none">
+              <span className="text-gray-600 pl-2 text-5xl animate-blink">
+                Add a title
+              </span>
+            </div>
+          )}
         </div>
 
         <Masonry
@@ -208,14 +191,20 @@ const Publish = ({ files, setPageState }: PublishProps) => {
             />
           ))}
         </Masonry>
+
+        <div className="flex justify-end mb-16 max-w-6xl mx-auto">
+          <Button onClick={() => setIsModalOpen(true)}>Next</Button>
+        </div>
       </div>
 
-      <CreateGlassboardModal
-        isOpen={isModalOpen}
-        close={() => setIsModalOpen(false)}
-        name={GlassboardName}
-        Glasspins={Glasspins}
-      />
+      <div>
+        <CreateGlassboardModal
+          isOpen={isModalOpen}
+          close={() => setIsModalOpen(false)}
+          name={GlassboardName}
+          Glasspins={Glasspins}
+        />
+      </div>
     </main>
   );
 };
@@ -239,29 +228,10 @@ const GlasspinCard = ({
   const showPlaceholder = !enteringTitle && title === "";
 
   return (
-    <div className=" bg-white rounded-2xl relative overflow-hidden mb-4">
-      <div className="px-2 relative w-full h-12 flex items-center">
-        <input
-          className="placeholder:font-bold placeholder:text-primary-brand w-full
-         font-headers absolute top-0 left-0 bottom-0 p-4 outline-none"
-          onFocus={() => setEnteringTitle(true)}
-          onBlur={() => setEnteringTitle(false)}
-          value={title}
-          onChange={(e) => onTitleChange(e.target.value)}
-        />
-        {showPlaceholder ? (
-          <div className="flex items-center">
-            <h1 className="text-lg text-primary-brand relative pointer-events-none pl-2 pr-1 w-fit">
-              ITEM NAME
-            </h1>
-            <div className="w-0.5 h-5 mb-1 relative bg-primary-brand invisible animate-blink" />
-          </div>
-        ) : null}
-      </div>
-      <div>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={image} alt="" />
-      </div>
+    <div className="bg-white rounded-2xl relative overflow-hidden mb-4">
+    <div className="relative">
+      <img src={image} alt="" className="w-full h-auto" />
+  
       <div className="absolute bottom-2 right-2">
         {selected ? (
           <IconButton
@@ -273,12 +243,33 @@ const GlasspinCard = ({
         ) : (
           <IconButton
             onClick={() => onSelectedChange(!selected)}
-            className="enabled:bg-primary-brand enabled:hover:bg-text-standard"
+            className="bg-white"
           >
-            <PlusCross />
+            <MinusIcon />
           </IconButton>
         )}
       </div>
     </div>
+  
+    <div className="px-2 relative w-full h-14 flex items-center">
+      <input
+        className="placeholder:font-bold text-background text-xl placeholder:text-primary-brand w-full
+        font-headers absolute top-0 left-0 bottom-0 p-4 outline-none"
+        onFocus={() => setEnteringTitle(true)}
+        onBlur={() => setEnteringTitle(false)}
+        value={title}
+        onChange={(e) => onTitleChange(e.target.value)}
+      />
+      {showPlaceholder ? (
+        <div className="flex items-center">
+          <h1 className="text-lg text-primary-brand relative pointer-events-none pl-2 pr-1 w-fit">
+            PIN NAME
+          </h1>
+          <div className="w-0.5 h-5 mb-1 relative bg-primary-brand invisible animate-blink" />
+        </div>
+      ) : null}
+    </div>
+  </div>
+  
   );
 };

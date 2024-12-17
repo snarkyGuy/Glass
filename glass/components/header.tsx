@@ -2,34 +2,54 @@ import Link from "next/link";
 import { ConnectKitButton } from "connectkit";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
+import { useState } from "react";
 
 export const Header = () => {
   const { address } = useAccount();
-  let connectedAccount = "";
-  if (address === "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266") {
-    connectedAccount = "Account: creator.eth";
-  }
-
-  if (address === "0x70997970C51812dc3A010C7d01b50e0d17dc79C8") {
-    connectedAccount = "Account: pinner.eth";
-  }
+  const [isMenuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}  className="bg-[#ffd0d0] px-8">
-      <div className="max-w-6xl mx-auto flex justify-between">
-        <div className="flex items-center gap-8 py-4">
-      
-          <h2>Glass</h2>
-          
-          <div className="text-md flex gap-8 h-full">
+    <header
+      style={{ fontFamily: '"Akaya Kanadaka", system-ui' }}
+      className="bg-[#ffd0d0] px-4 md:px-8"
+    >
+      <div className="max-w-6xl mx-auto flex justify-between items-center">
+        {/* Logo and Title */}
+        <div className="flex items-center gap-4 py-4">
+          <h2 className="text-gray-700 text-2xl ">Glass</h2>
+        </div>
+
+        {/* Hamburger Menu (Visible on small screens) */}
+        <div className="flex md:hidden">
+          <button
+            onClick={() => setMenuOpen(!isMenuOpen)}
+            className="text-gray-700 focus:outline-none"
+          >
+            {isMenuOpen ? (
+              <span className="text-xl">✕</span>
+            ) : (
+              <span className="text-xl">☰</span>
+            )}
+          </button>
+        </div>
+
+        {/* Navigation Links */}
+        <nav
+          className={`${
+            isMenuOpen ? "block" : "hidden"
+          } md:flex items-center gap-8 py-4 flex-col md:flex-row`}
+        >
+          <div className="flex flex-col md:flex-row gap-4 md:gap-8 text-md">
             <HeaderButton href="/">Home</HeaderButton>
-            <HeaderButton href="/mydashboard">Dashboard</HeaderButton>
+            <HeaderButton href="/mydashboard">My Portfolio</HeaderButton>
+            <HeaderButton href="/">Most Viewed</HeaderButton>
           </div>
-        </div>
-        <div className="py-4 flex gap-8 items-center">
-          <p>{connectedAccount}</p>
-          <ConnectKitButton />
-        </div>
+
+          {/* Connect Button */}
+          <div className="py-2 flex justify-center md:py-0 md:ml-auto">
+            <ConnectKitButton />
+          </div>
+        </nav>
       </div>
     </header>
   );
@@ -46,16 +66,18 @@ const HeaderButton = ({ href, children }: HeaderButtonProps) => {
     pathname === href || (href !== "/" && pathname.startsWith(href));
 
   return (
-    <div className="flex flex-col relative justify-center group">
+    <div className="flex flex-col text-gray-600 relative justify-center group">
       <Link
-        className={`${selectedRoute ? "font-bold" : ""} no-underline`}
+        className={`${
+          selectedRoute ? "font-bold" : ""
+        } no-underline text-base hover:text-gray-800`}
         href={href}
       >
         {children}
       </Link>
       <div
         className={`h-1 -bottom-4 left-0 right-0 absolute ${
-          selectedRoute ? "bg-green" : ""
+          selectedRoute ? "bg-green-500" : ""
         }`}
       />
     </div>

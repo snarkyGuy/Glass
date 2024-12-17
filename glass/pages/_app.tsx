@@ -7,14 +7,14 @@ import dynamic from "next/dynamic";
 import { Header } from "components/header";
 import { Montserrat } from "next/font/google";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { bttcTestnet } from "constants/custom-chains";
+import { bttcTestnet , hederaPreviewnet } from "constants/custom-chains";
 
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 const getChains = (): Chain[] => {
 
-    return [bttcTestnet];
+    return [bttcTestnet , hederaPreviewnet];
   
 };
 
@@ -32,7 +32,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     <WagmiConfig client={client}>
       <ConnectKitProvider>
         <QueryClientProvider client={queryClient}>
-          <div className={montserrat.className}>
+          <div>
             <Header />
             <div className="mx-8">
               <Component {...pageProps} />

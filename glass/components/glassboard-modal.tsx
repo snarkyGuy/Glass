@@ -11,11 +11,12 @@ import {
 import { GlassBoardABI } from "contracts";
 import { BigNumber, ethers } from "ethers";
 import { Button } from "./button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Glasspin } from "../pages/create-Glassboard";
 import { contracts } from "constants/contracts";
 import { PinataSDK } from "pinata-web3";
 import { NavigationButton } from "./navigation";
+import { useRouter } from "next/router";
 
 // Environment variable for security
 
@@ -76,7 +77,7 @@ export const CreateGlassboardModal = ({
   const loadingStateString = {
     ipfs: "Uploading to IPFS",
     mint: "Confirming  transaction...",
-    initial: "Publish Glassboard",
+    initial: "Continue",
   }[loadingState];
 
   const { writeAsync: onCreateGlassboard } = useContractWrite({
@@ -151,78 +152,78 @@ export const CreateGlassboardModal = ({
     }
   };
 
+  const router = useRouter();
+
+  useEffect(() => {
+    if (successful) {
+      router.push("/mydashboard");
+    }
+  }, [successful, router]);
+
   return (
-    <Modal isOpen={isOpen} onDismiss={close} >
-      <div className="m-4">
-        <div className="flex justify-between mb-4">
-          <IconButton className="" onClick={close}>
-            <Close />
-          </IconButton>
-        </div>
+    <Modal isOpen={isOpen} onDismiss={close}>
+      <div className="m-4 p-4 bg-white  ">
+        <div className="flex flex-col">
+          <div className=" flex items-center  justify-between ">
+            <h2 className="text-2xl text-gray-600 font-bold mb-1">Publish your board</h2>
+            <IconButton className="mb-4" onClick={close}>
+              <Close />
+            </IconButton>
+          </div>
 
-      
-      <div className="w-full flex flex-col justify-center ">
-            <h2 className="mb-4">Publish</h2>
-            {/* <p className="font-bold text-lg"></p> */}
-            <p className="text-md">
-              <p className="text-md text-gray-400">
-                To create your Glassboard, you&apos;ll need to pay for each
-                Glasspin you&apos;ve added, along with a fee for setting up the
-                Glassboard.
-              </p>
-            </p>
-          
-      <div className="w-full flex flex-col justify-center ">
-            <p className="text-md mt-4">Glassboard Fee</p>
-            <div className="flex justify-between">
+          <p className="text-md text-gray-400  mb-4">
+            To set up your Glassboard, you&apos;ll be charged for each Glasspin
+            you add, along with a setup fee for the Glassboard.. (No fees for
+            testing atm.)
+          </p>
+
+          <div className="flex mt-4 flex-col space-y-4">
+            <div className=" text-md flex justify-between  items-center">
               <h3 className="text-gray-500">{name}</h3>
-              <h3 className="">
-                {ethers.utils
-                  .formatEther(createBoardFee.toString() ?? "0")
-                  .toString()}
-                BTT
+
+              <h4 className="text-gray-500 italic">
+                 fee ={" "}
+                <span className="text-gray-400">
+                  {" "}
+                  {/* {ethers.utils.formatEther(
+                    createBoardFee.toString() ?? "0"
+                  )}{" "}
+                  BTT{" "} */}
+                  none
+                </span>
+              </h4>
+            </div>
+
+            <div className="flex text-md justify-between items-center">
+              <h3 className="text-gray-500">Num of Pins = {numPins}</h3>
+              <h4 className="text-gray-500 italic">
+                 fee ={" "}
+                <span className="text-gray-400">
+                  {/* {ethers.utils.formatEther(totalPinFee.toString() ?? "0")} BTT{" "} */}{" "}
+                  none
+                </span>
+              </h4>
+            </div>
+
+            <div className="flex text-md justify-between  text-primary-brand mt-4">
+              <h3>Total Fee</h3>
+              <h3 className="italic">
+                {ethers.utils.formatEther(
+                  createBoardFee.add(totalPinFee).toString() ?? "0"
+                )}{" "}
+                None!
               </h3>
             </div>
 
-            <p className="text-md mt-4">Glasspin Fees</p>
-            <div className="flex justify-between">
-              <h3 className="text-gray-500">Pins ({numPins})</h3>
-              <h3 className="">
-                {ethers.utils
-                  .formatEther(totalPinFee.toString() ?? "0")
-                  .toString()}
-                BTT
-              </h3>
-            </div>
-
-            <div className="flex justify-between text-primary-brand mt-4">
-              <h3 className="">Total</h3>
-              <h3 className="">
-                {ethers.utils
-                  .formatEther(
-                    createBoardFee.add(totalPinFee).toString() ?? "0"
-                  )
-                  .toString()}
-                BTT
-              </h3>
-            </div>
-
-            <div className="flex justify-between mt-4">
-              <div />
-              <div>
-                {!successful ? (
-                  <Button
-                    onClick={onSubmit}
-                    disabled={!["initial"].includes(loadingState)}
-                  >
-                    {loadingStateString}
-                  </Button>
-                ) : (
-                  <NavigationButton href="/mydashboard">
-                    Go to Dashboard
-                  </NavigationButton>
-                )}
-              </div>
+            <div className="flex justify-end mt-4">
+              {!successful ? (
+                <Button
+                  onClick={onSubmit}
+                  disabled={!["initial"].includes(loadingState)}
+                >
+                  {loadingStateString}
+                </Button>
+              ) : null}
             </div>
           </div>
         </div>

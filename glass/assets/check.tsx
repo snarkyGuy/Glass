@@ -8,8 +8,10 @@ export const Check = () => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M6.00035 13.6133L1.86035 9.4733L3.74702 7.58663L6.00035 9.84663L12.587 3.2533L14.4737 5.13996L6.00035 13.6133Z"
-        fill="#1F2128"
+        d="M8 1V15M1 8H15"
+        stroke="#1F2128"
+        strokeWidth="2"
+        strokeLinecap="round"
       />
     </svg>
   );
